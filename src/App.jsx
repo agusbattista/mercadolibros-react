@@ -1,4 +1,10 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import Contact from "./pages/Contact";
+import Bestsellers from "./pages/Bestsellers";
+import Offers from "./pages/Offers";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -20,10 +26,20 @@ function App() {
 
   return (
     <main>
-      <h1>Inicio</h1>
-      {loading && <p>Cargando productos...</p>}
-      {error && !loading && <p>{error}</p>}
-      {!loading && !error && <p>Productos cargados</p>}
+      <Router>
+        <div>
+          <Header />
+          {loading && <p>Cargando productos...</p>}
+          {!loading && !error && <p>Productos cargados</p>}
+          {error && !loading && <p>{error}</p>}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/contacto" element={<Contact />} />
+            <Route path="/masvendidos" element={<Bestsellers />} />
+            <Route path="/ofertas" element={<Offers />} />
+          </Routes>
+        </div>
+      </Router>
     </main>
   );
 }
