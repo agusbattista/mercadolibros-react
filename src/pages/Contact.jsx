@@ -1,5 +1,4 @@
 function Contact() {
-  return <p>Soy la página contacto</p>;
+  return <p>Soy la página de contacto</p>;
 }
-
 export default Contact;

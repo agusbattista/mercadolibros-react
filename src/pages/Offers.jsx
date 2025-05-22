@@ -1,4 +1,4 @@
 function Offers() {
-  return <p>Soy la página ofertas</p>;
+  return <p>Soy la página de ofertas</p>;
 }
 export default Offers;

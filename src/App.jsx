@@ -5,6 +5,10 @@ import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import Bestsellers from "./pages/Bestsellers";
 import Offers from "./pages/Offers";
+import Cart from "./pages/Cart";
+import Admin from "./pages/Admin";
+import Login from "./pages/Login";
+import Footer from "./components/Footer";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -12,7 +16,7 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("https://www.googleapis.com/books/v1/volumes?q=react&maxResults=30")
+    fetch("https://www.googleapis.com/books/v1/volumes?q=fiction&maxResults=28")
       .then((response) => response.json())
       .then((data) => setBooks(data.items))
       .catch((error) => {
@@ -27,18 +31,20 @@ function App() {
   return (
     <main>
       <Router>
-        <div>
-          <Header />
-          {loading && <p>Cargando productos...</p>}
-          {!loading && !error && <p>Productos cargados</p>}
-          {error && !loading && <p>{error}</p>}
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/contacto" element={<Contact />} />
-            <Route path="/masvendidos" element={<Bestsellers />} />
-            <Route path="/ofertas" element={<Offers />} />
-          </Routes>
-        </div>
+        <Header />
+        <Routes>
+          <Route
+            path="/"
+            element={<Home books={books} loading={loading} error={error} />}
+          />
+          <Route path="/contacto" element={<Contact />} />
+          <Route path="/masvendidos" element={<Bestsellers />} />
+          <Route path="/ofertas" element={<Offers />} />
+          <Route path="/carrito" element={<Cart />} />
+          <Route path="/administracion" element={<Admin />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+        <Footer />
       </Router>
     </main>
   );
