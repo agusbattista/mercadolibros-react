@@ -3,10 +3,10 @@ import Card from "react-bootstrap/Card";
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 
-function RenderCard({ book }) {
-  const { addToCart } = useContext(CartContext);
-  const handleAddToCart = () => {
-    addToCart(book);
+function RenderCartCard({ book }) {
+  const { removeFromCart } = useContext(CartContext);
+  const handleRemoveFromCart = () => {
+    removeFromCart(book);
   };
   return (
     <Card style={{ width: "18rem" }} className="d-flex flex-column mx-auto">
@@ -21,11 +21,16 @@ function RenderCard({ book }) {
           {book.volumeInfo.authors?.join(", ") || "Autor desconocido"}
         </Card.Text>
         <Card.Text>US${book.saleInfo?.listPrice?.amount ?? 0}</Card.Text>
-        <Button variant="primary" className="mt-auto" onClick={handleAddToCart}>
-          Agregar al carrito
+        <Card.Text>Cantidad: {book.quantity}</Card.Text>
+        <Button
+          variant="warning"
+          className="mt-auto"
+          onClick={handleRemoveFromCart}
+        >
+          Eliminar del carrito
         </Button>
       </Card.Body>
     </Card>
   );
 }
-export default RenderCard;
+export default RenderCartCard;
