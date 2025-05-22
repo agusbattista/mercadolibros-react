@@ -4,7 +4,7 @@ import RenderCartCard from "../components/RenderCartCard";
 import Button from "react-bootstrap/Button";
 
 function Cart() {
-  const { cart, cleanCart, totalPrice } = useContext(CartContext);
+  const { cart, cleanCart, totalPrice, totalItems } = useContext(CartContext);
 
   return (
     <section className="container mt-4">
@@ -18,6 +18,7 @@ function Cart() {
             ))}
           </div>
           <div className="text-center mt-4">
+            <p>Cantidad total de libros: {totalItems}</p>
             <p>Precio total: uS${Number(totalPrice.toFixed(2))}</p>
             <Button variant="danger" onClick={cleanCart}>
               Vaciar Carrito
