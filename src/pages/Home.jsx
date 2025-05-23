@@ -1,9 +1,10 @@
 import RenderCard from "../components/RenderCard";
+import LoadingAnimation from "../components/LoadingAnimation";
 
 function Home({ books, loading, error }) {
   return (
-    <section className="container mt-4">
-      {loading && <p>Cargando libros...</p>}
+    <section className="container mt-4 d-flex justify-content-center">
+      {loading && <LoadingAnimation />}
       {error && !loading && <p>{error}</p>}
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         {books.map((book) => (
