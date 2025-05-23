@@ -9,6 +9,8 @@ import Cart from "./pages/Cart";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import Footer from "./components/Footer";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -30,22 +32,31 @@ function App() {
 
   return (
     <main>
-      <Router>
-        <Header />
-        <Routes>
-          <Route
-            path="/"
-            element={<Home books={books} loading={loading} error={error} />}
-          />
-          <Route path="/contacto" element={<Contact />} />
-          <Route path="/masvendidos" element={<Bestsellers />} />
-          <Route path="/ofertas" element={<Offers />} />
-          <Route path="/carrito" element={<Cart />} />
-          <Route path="/administracion" element={<Admin />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-        <Footer />
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Header />
+          <Routes>
+            <Route
+              path="/"
+              element={<Home books={books} loading={loading} error={error} />}
+            />
+            <Route path="/contacto" element={<Contact />} />
+            <Route path="/masvendidos" element={<Bestsellers />} />
+            <Route path="/ofertas" element={<Offers />} />
+            <Route path="/carrito" element={<Cart />} />
+            <Route
+              path="/administracion"
+              element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </AuthProvider>
     </main>
   );
 }
