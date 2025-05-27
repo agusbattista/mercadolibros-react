@@ -31,33 +31,35 @@ function App() {
   }, []);
 
   return (
-    <main>
+    <div className="d-flex flex-column min-vh-100">
       <AuthProvider>
         <Router>
           <Header />
-          <Routes>
-            <Route
-              path="/"
-              element={<Home books={books} loading={loading} error={error} />}
-            />
-            <Route path="/contacto" element={<Contact />} />
-            <Route path="/masvendidos" element={<Bestsellers />} />
-            <Route path="/ofertas" element={<Offers />} />
-            <Route path="/carrito" element={<Cart />} />
-            <Route
-              path="/administracion"
-              element={
-                <ProtectedRoute>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/login" element={<Login />} />
-          </Routes>
+          <main className="flex-fill container my-4">
+            <Routes>
+              <Route
+                path="/"
+                element={<Home books={books} loading={loading} error={error} />}
+              />
+              <Route path="/contacto" element={<Contact />} />
+              <Route path="/masvendidos" element={<Bestsellers />} />
+              <Route path="/ofertas" element={<Offers />} />
+              <Route path="/carrito" element={<Cart />} />
+              <Route
+                path="/administracion"
+                element={
+                  <ProtectedRoute>
+                    <Admin />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </main>
           <Footer />
         </Router>
       </AuthProvider>
-    </main>
+    </div>
   );
 }
 
