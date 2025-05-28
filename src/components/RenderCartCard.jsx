@@ -12,8 +12,9 @@ function RenderCartCard({ book }) {
     <Card style={{ width: "18rem" }} className="d-flex flex-column mx-auto">
       <Card.Img
         variant="top"
-        src={book.volumeInfo.imageLinks?.thumbnail}
+        src={book.volumeInfo.imageLinks?.large}
         alt={"Imagen de " + book.volumeInfo.title}
+        loading="lazy"
       />
       <Card.Body className="d-flex flex-column">
         <Card.Title>{book.volumeInfo.title}</Card.Title>

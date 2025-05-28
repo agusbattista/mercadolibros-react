@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import booksIds from "./data/booksIds.json";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -18,9 +19,15 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("https://www.googleapis.com/books/v1/volumes?q=fiction&maxResults=28")
-      .then((response) => response.json())
-      .then((data) => setBooks(data.items))
+    const requests = booksIds.map((id) =>
+      fetch(`https://www.googleapis.com/books/v1/volumes/${id}`).then(
+        (response) => response.json()
+      )
+    );
+    Promise.all(requests)
+      .then((data) => {
+        setBooks(data);
+      })
       .catch((error) => {
         setError("Error al cargar los libros. Inténtalo más tarde.");
         console.log("Error al cargar los libros", error);
