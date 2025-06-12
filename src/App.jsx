@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Details from "./pages/Details";
 
 //My JSON Server - Fake Online REST Server (con 16 libros curados por mí)
 const BASE_URL =
@@ -47,6 +48,7 @@ function App() {
                 path="/"
                 element={<Home books={books} loading={loading} error={error} />}
               />
+              <Route path="/detalles/:id" element={<Details />}></Route>
               <Route path="/contacto" element={<Contact />} />
               <Route path="/masvendidos" element={<Bestsellers />} />
               <Route path="/ofertas" element={<Offers />} />
