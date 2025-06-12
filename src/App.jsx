@@ -51,7 +51,17 @@ function App() {
               <Route path="/detalles/:id" element={<Details />}></Route>
               <Route path="/contacto" element={<Contact />} />
               <Route path="/masvendidos" element={<Bestsellers />} />
-              <Route path="/ofertas" element={<Offers />} />
+              <Route
+                path="/ofertas"
+                element={
+                  <Offers
+                    books={books}
+                    loading={loading}
+                    error={error}
+                    limit={8}
+                  />
+                }
+              />
               <Route path="/carrito" element={<Cart />} />
               <Route
                 path="/administracion"
