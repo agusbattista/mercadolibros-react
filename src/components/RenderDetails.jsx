@@ -31,14 +31,17 @@ function RenderDetails({ book }) {
         <Card.Title>{book.volumeInfo.title}</Card.Title>
         <Card.Text>
           {book.volumeInfo.authors?.join(", ") || "Autor desconocido"}
-          <div
-            className="description"
-            dangerouslySetInnerHTML={{
-              __html:
-                book.volumeInfo?.description || "Sin descripción disponible",
-            }}
-          />
         </Card.Text>
+        <Card.Text>
+          ISBN: {book.volumeInfo.industryIdentifiers?.[0]?.identifier || "N/A"}
+        </Card.Text>
+        <div
+          className="description"
+          dangerouslySetInnerHTML={{
+            __html:
+              book.volumeInfo?.description || "Sin descripción disponible",
+          }}
+        />
         <Card.Text>US${book.saleInfo?.listPrice?.amount ?? 0}</Card.Text>
         <Button variant="primary" className="mt-auto" onClick={handleAddToCart}>
           Agregar al carrito
