@@ -11,7 +11,6 @@ import Login from "./pages/Login";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import booksIds from "./data/booksIds.json";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -19,12 +18,8 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const requests = booksIds.map((id) =>
-      fetch(`https://www.googleapis.com/books/v1/volumes/${id}`).then(
-        (response) => response.json()
-      )
-    );
-    Promise.all(requests)
+    fetch(`https://agusbattista.github.io/mercadolibros-data/db.json`)
+      .then((response) => response.json())
       .then((data) => {
         setBooks(data);
       })
