@@ -12,13 +12,17 @@ import Footer from "./components/Footer";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+//My JSON Server - Fake Online REST Server (con 16 libros curados por mí)
+const BASE_URL =
+  "https://my-json-server.typicode.com/agusbattista/mercadolibros-data/books";
+
 function App() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`https://agusbattista.github.io/mercadolibros-data/db.json`)
+    fetch(BASE_URL)
       .then((response) => response.json())
       .then((data) => {
         setBooks(data);
