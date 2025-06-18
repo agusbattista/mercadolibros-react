@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
@@ -21,21 +21,33 @@ function App() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const notifyError = useCallback((error) => {
+    setError("Error al cargar los libros. Inténtalo más tarde.");
+    console.log("Error al cargar los libros.", error);
+  }, []);
+
+  const fetchBooks = useCallback(async () => {
+    try {
+      const response = await fetch(BASE_URL);
+      if (response.ok) {
+        const data = await response.json();
+        setBooks(data);
+        setError(null);
+      } else {
+        setBooks([]);
+        notifyError(response.status);
+      }
+    } catch (error) {
+      setBooks([]);
+      notifyError(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [notifyError]);
 
   useEffect(() => {
-    fetch(BASE_URL)
-      .then((response) => response.json())
-      .then((data) => {
-        setBooks(data);
-      })
-      .catch((error) => {
-        setError("Error al cargar los libros. Inténtalo más tarde.");
-        console.log("Error al cargar los libros", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    fetchBooks();
+  }, [fetchBooks]);
 
   return (
     <div className="d-flex flex-column min-vh-100">
