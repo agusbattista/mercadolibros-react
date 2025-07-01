@@ -62,7 +62,17 @@ function App() {
               />
               <Route path="/detalles/:id" element={<Details />}></Route>
               <Route path="/contacto" element={<Contact />} />
-              <Route path="/masvendidos" element={<Bestsellers />} />
+              <Route
+                path="/masvendidos"
+                element={
+                  <Bestsellers
+                    books={books}
+                    loading={loading}
+                    error={error}
+                    limit={8}
+                  />
+                }
+              />
               <Route
                 path="/ofertas"
                 element={
