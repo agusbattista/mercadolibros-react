@@ -1,11 +1,22 @@
 import { createContext, useState, useContext } from "react";
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+function extractUsername(token) {
+  if (typeof token === "string" && token.startsWith("fake-token-")) {
+    return token.replace("fake-token-", "");
+  } else {
+    return null;
+  }
+}
 
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(() => {
+    const savedToken = localStorage.getItem("authToken");
+    return savedToken ? extractUsername(savedToken) : null;
+  });
+
+  //login y logout simulados
   const login = (username) => {
-    // Simulando la creación de un token (en una app real, esto sería generado por un servidor)
     const token = `fake-token-${username}`;
     localStorage.setItem("authToken", token);
     setUser(username);
