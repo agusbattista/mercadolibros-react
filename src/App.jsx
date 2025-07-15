@@ -9,7 +9,6 @@ import Cart from "./pages/Cart";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import Footer from "./components/Footer";
-import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Details from "./pages/Details";
 
@@ -51,54 +50,52 @@ function App() {
 
   return (
     <div className="d-flex flex-column min-vh-100">
-      <AuthProvider>
-        <Router>
-          <Header />
-          <main className="flex-fill container my-4">
-            <Routes>
-              <Route
-                path="/"
-                element={<Home books={books} loading={loading} error={error} />}
-              />
-              <Route path="/detalles/:id" element={<Details />}></Route>
-              <Route path="/contacto" element={<Contact />} />
-              <Route
-                path="/masvendidos"
-                element={
-                  <Bestsellers
-                    books={books}
-                    loading={loading}
-                    error={error}
-                    limit={8}
-                  />
-                }
-              />
-              <Route
-                path="/ofertas"
-                element={
-                  <Offers
-                    books={books}
-                    loading={loading}
-                    error={error}
-                    limit={8}
-                  />
-                }
-              />
-              <Route path="/carrito" element={<Cart />} />
-              <Route
-                path="/administracion"
-                element={
-                  <ProtectedRoute>
-                    <Admin />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/login" element={<Login />} />
-            </Routes>
-          </main>
-          <Footer />
-        </Router>
-      </AuthProvider>
+      <Router>
+        <Header />
+        <main className="flex-fill container my-4">
+          <Routes>
+            <Route
+              path="/"
+              element={<Home books={books} loading={loading} error={error} />}
+            />
+            <Route path="/detalles/:id" element={<Details />}></Route>
+            <Route path="/contacto" element={<Contact />} />
+            <Route
+              path="/masvendidos"
+              element={
+                <Bestsellers
+                  books={books}
+                  loading={loading}
+                  error={error}
+                  limit={8}
+                />
+              }
+            />
+            <Route
+              path="/ofertas"
+              element={
+                <Offers
+                  books={books}
+                  loading={loading}
+                  error={error}
+                  limit={8}
+                />
+              }
+            />
+            <Route path="/carrito" element={<Cart />} />
+            <Route
+              path="/administracion"
+              element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </main>
+        <Footer />
+      </Router>
     </div>
   );
 }
