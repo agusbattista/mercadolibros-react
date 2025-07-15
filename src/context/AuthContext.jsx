@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
     return savedToken ? extractUsername(savedToken) : null;
   });
 
-  //login y logout simulados
+  //Simulación de token de autenticación
   const login = (username) => {
     const token = `fake-token-${username}`;
     localStorage.setItem("authToken", token);
