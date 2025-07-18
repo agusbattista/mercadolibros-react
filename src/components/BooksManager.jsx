@@ -70,6 +70,17 @@ function BooksManager() {
     try {
       if (editId) {
         await updateBook(editId, bookData);
+        toast.success("Libro editado correctamente", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
       } else {
         if (!form.id || form.id.trim() === "") {
           setFormError("Debes proporcionar un ID para el libro");
@@ -78,6 +89,17 @@ function BooksManager() {
         await addBook({
           ...bookData,
           id: form.id.trim(),
+        });
+        toast.success("Libro agregado correctamente", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
         });
       }
       handleClose();
