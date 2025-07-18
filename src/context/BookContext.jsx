@@ -24,7 +24,8 @@ export function BookProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { updateBookInCart, removeBookFromCartById } = useContext(CartContext);
+  const { updateBookInCart, removeBookFromCartById, cart, setCart } =
+    useContext(CartContext);
 
   const notifyError = useCallback((error) => {
     setError("Error al cargar los libros. Inténtalo más tarde.");
@@ -40,13 +41,16 @@ export function BookProvider({ children }) {
         setBooks(data);
         setError(null);
         localStorage.setItem("localBooks", JSON.stringify(data));
+        return data;
       } else {
         setBooks([]);
         notifyError(response.status);
+        return [];
       }
     } catch (error) {
       setBooks([]);
       notifyError(error);
+      return [];
     } finally {
       setLoading(false);
     }
@@ -146,8 +150,31 @@ export function BookProvider({ children }) {
   );
 
   const resetBooks = useCallback(async () => {
-    await fetchBooks();
-  }, [fetchBooks]);
+    try {
+      const freshBooks = await fetchBooks();
+      if (Array.isArray(freshBooks) && cart && Array.isArray(cart)) {
+        const updatedCart = cart
+          .map((cartItem) => {
+            const updatedBook = freshBooks.find(
+              (book) => book.id === cartItem.id
+            );
+            if (updatedBook) {
+              return { ...updatedBook, quantity: cartItem.quantity };
+            } else {
+              return null;
+            }
+          })
+          .filter((item) => item !== null);
+        setCart(updatedCart);
+      } else {
+        console.warn("No se pudo sincronizar el carrito: datos inválidos");
+        setError("No se pudo sincronizar el carrito: datos inválidos");
+      }
+    } catch (error) {
+      console.error("Error al resetear los libros:", error);
+      setError("Error al resetear los libros");
+    }
+  }, [fetchBooks, cart, setCart]);
 
   return (
     <BookContext.Provider
