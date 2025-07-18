@@ -69,9 +69,9 @@ export function BookProvider({ children }) {
     (id) => {
       const book = books.find((book) => book.id === id);
       if (!book) {
-        throw new Error(`Libro con ID ${id} no encontrado.`);
+        return null;
       }
-      return Promise.resolve(book);
+      return book;
     },
     [books]
   );

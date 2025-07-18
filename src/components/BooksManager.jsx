@@ -4,12 +4,16 @@ import { useBookContext } from "../context/BookContext";
 import BooksTable from "./BooksTable";
 import BookForm from "./BookForm";
 import LoadingAnimation from "../components/LoadingAnimation";
+import DeleteConfirmModal from "./DeleteConfirmModal";
+import { toast, Bounce } from "react-toastify";
 
 function BooksManager() {
   const { books, loading, error, addBook, updateBook, deleteBook } =
     useBookContext();
 
   const [formError, setFormError] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState(null);
 
   const blankBook = {
     id: "",
@@ -85,15 +89,47 @@ function BooksManager() {
     }
   };
 
-  //Convetir a un modal
-  const handleDelete = async (id) => {
-    if (window.confirm("¿Estás seguro que deseas eliminar este libro?")) {
-      try {
-        await deleteBook(id);
-      } catch (error) {
-        console.error("Error al eliminar libro:", error);
-      }
+  const handleDelete = (id) => {
+    setBookToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async (id) => {
+    try {
+      await deleteBook(id);
+      toast.success("Libro eliminado correctamente", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } catch (error) {
+      console.error("Error al eliminar libro:", error);
+      toast.error("Error al eliminar el libro", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } finally {
+      setShowDeleteModal(false);
+      setBookToDelete(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setBookToDelete(null);
   };
 
   return (
@@ -122,6 +158,13 @@ function BooksManager() {
         show={show}
         editId={editId}
         formError={formError}
+      />
+
+      <DeleteConfirmModal
+        show={showDeleteModal}
+        onHide={cancelDelete}
+        id={bookToDelete}
+        confirmDelete={confirmDelete}
       />
     </>
   );
