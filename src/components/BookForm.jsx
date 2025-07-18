@@ -16,7 +16,7 @@ function BookForm({
   };
 
   return (
-    <Modal show={show} onHide={handleClose} size="lg" className="mt-5">
+    <Modal show={show} onHide={handleClose} size="lg">
       <Modal.Header closeButton>
         <Modal.Title>{editId ? "Editar" : "Agregar"} libro</Modal.Title>
       </Modal.Header>
