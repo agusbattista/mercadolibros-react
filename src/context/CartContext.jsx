@@ -75,6 +75,7 @@ export function CartProvider({ children }) {
     <CartContext.Provider
       value={{
         cart,
+        setCart,
         addToCart,
         removeFromCart,
         updateBookInCart,
