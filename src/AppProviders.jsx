@@ -5,9 +5,9 @@ import { BookProvider } from "./context/BookContext";
 function AppProviders({ children }) {
   return (
     <AuthProvider>
-      <BookProvider>
-        <CartProvider>{children}</CartProvider>
-      </BookProvider>
+      <CartProvider>
+        <BookProvider>{children}</BookProvider>
+      </CartProvider>
     </AuthProvider>
   );
 }

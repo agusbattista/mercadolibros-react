@@ -5,6 +5,7 @@ import {
   useCallback,
   useEffect,
 } from "react";
+import { CartContext } from "./CartContext";
 
 //My JSON Server - Fake Online REST Server (con 16 libros curados por mí)
 const BASE_URL =
@@ -22,6 +23,8 @@ export function BookProvider({ children }) {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { updateBookInCart, removeBookFromCartById } = useContext(CartContext);
 
   const notifyError = useCallback((error) => {
     setError("Error al cargar los libros. Inténtalo más tarde.");
@@ -110,6 +113,7 @@ export function BookProvider({ children }) {
         setBooks((prevBooks) =>
           prevBooks.map((book) => (book.id === id ? { ...bookData, id } : book))
         );
+        updateBookInCart({ ...bookData, id });
         return { ...bookData, id };
       } catch (error) {
         console.error(`Error al actualizar el libro con ID ${id}:`, error);
@@ -119,7 +123,7 @@ export function BookProvider({ children }) {
         setLoading(false);
       }
     },
-    [setLoading, setBooks, setError]
+    [setLoading, setBooks, setError, updateBookInCart]
   );
 
   const deleteBook = useCallback(
@@ -128,6 +132,7 @@ export function BookProvider({ children }) {
         setLoading(true);
         await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
         setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+        removeBookFromCartById(id);
         return true;
       } catch (error) {
         console.error(`Error al eliminar el libro con ID ${id}:`, error);
@@ -137,7 +142,7 @@ export function BookProvider({ children }) {
         setLoading(false);
       }
     },
-    [setLoading, setBooks, setError]
+    [setLoading, setBooks, setError, removeBookFromCartById]
   );
 
   const resetBooks = useCallback(async () => {
