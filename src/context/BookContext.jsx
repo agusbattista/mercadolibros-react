@@ -9,12 +9,11 @@ import {
 //My JSON Server - Fake Online REST Server (con 16 libros curados por mí)
 const BASE_URL =
   "https://my-json-server.typicode.com/agusbattista/mercadolibros-data/books";
-
 /*
   La API My JSON Server es una herramienta que permite crear un servidor RESTful falso para pruebas y desarrollo.
   En este caso, se utiliza para simular una API de libros con un conjunto de datos predefinidos.
   Permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sin necesidad de un backend real; con la salvedad de que los datos no son persistentes.
-  Por lo tanto, se usa combina con un estado local en React para manejar los libros en la aplicación.
+  Por lo tanto, se combina con un estado local en React para manejar los libros en la aplicación.
   */
 
 export const BookContext = createContext();
