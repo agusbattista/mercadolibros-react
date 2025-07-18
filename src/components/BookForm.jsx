@@ -1,5 +1,6 @@
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react"; // Añadir useState
 
 function BookForm({
   handleClose,
@@ -10,6 +11,14 @@ function BookForm({
   editId,
   formError,
 }) {
+  const [authorsInput, setAuthorsInput] = useState("");
+
+  useEffect(() => {
+    if (form.volumeInfo?.authors) {
+      setAuthorsInput(form.volumeInfo.authors.join(", "));
+    }
+  }, [form.volumeInfo?.authors]);
+
   const ensureHttps = (url) => {
     if (!url) return "";
     return url.replace(/^http:/, "https:");
@@ -78,19 +87,23 @@ function BookForm({
           <Form.Group className="mb-3">
             <Form.Label>Autores</Form.Label>
             <Form.Control
-              value={form.volumeInfo.authors?.join(", ")}
+              value={authorsInput}
               placeholder="George R. R. Martin"
-              onChange={(e) =>
+              onChange={(e) => {
+                setAuthorsInput(e.target.value);
+              }}
+              onBlur={() => {
                 setForm({
                   ...form,
                   volumeInfo: {
                     ...form.volumeInfo,
-                    authors: e.target.value
+                    authors: authorsInput
                       .split(",")
-                      .map((author) => author.trim()),
+                      .map((author) => author.trim())
+                      .filter((author) => author !== ""),
                   },
-                })
-              }
+                });
+              }}
               required
             />
             <Form.Text className="text-muted">
