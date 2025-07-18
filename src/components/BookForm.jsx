@@ -102,7 +102,7 @@ function BookForm({
             <Form.Label>URL de la imagen</Form.Label>
             <Form.Control
               value={form.volumeInfo.imageLinks?.large}
-              placeholder="https://example.com/image.jpg"
+              placeholder="https://ejemplo.com/imagen.jpg"
               onChange={(e) =>
                 setForm({
                   ...form,
