@@ -1,35 +1,52 @@
-import { useState, useEffect } from "react";
+import { useContext, useMemo } from "react";
 import RenderCard from "../components/RenderCard";
 import LoadingAnimation from "../components/LoadingAnimation";
+import { BookContext } from "../context/BookContext";
 
-/*  Simulo al azar los libros más vendidos y 
-    los guardo en el localStorage para que no cambien con tanta frecuencia */
-function Bestsellers({ books, loading, error, limit }) {
-  const [bestSellers, setBestSellers] = useState(() => {
-    const savedBestSellers = localStorage.getItem("bestSellers");
-    return savedBestSellers ? JSON.parse(savedBestSellers) : [];
-  });
+/* Simulación de best sellers con una selección "aleatoria" determinista que cambia según la colección de libros o el número de semana del año */
+function Bestsellers({ limit }) {
+  const { books, loading, error } = useContext(BookContext);
 
-  function getRandomElements(array, n) {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled.slice(0, n);
-  }
+  const milisecondsInWeek = 7 * 24 * 60 * 60 * 1000;
 
-  useEffect(() => {
-    if (books.length > 0 && bestSellers.length === 0) {
-      const randomBooks = getRandomElements(books, limit);
-      setBestSellers(randomBooks);
-      localStorage.setItem("bestSellers", JSON.stringify(randomBooks));
-    }
-  }, [books, bestSellers.length, limit]);
+  const getWeeklySeed = () => {
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const weekNumber = Math.ceil((now - startOfYear) / milisecondsInWeek);
+    return weekNumber;
+  };
+
+  // Función de selección determinista basada en semilla
+  const getSeededSelection = (array, count, seed) => {
+    if (!array || array.length === 0) return [];
+    const hashString = (str) => {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = (hash << 5) - hash + char + seed;
+        hash = hash & hash;
+      }
+      return Math.abs(hash);
+    };
+    const rankedBooks = array.map((book) => ({
+      ...book,
+      rank: hashString(book.id),
+    }));
+    const sortedBooks = rankedBooks.sort((a, b) => a.rank - b.rank);
+    return sortedBooks.slice(0, count).map((book) => {
+      const { rank: UNUSED_RANK, ...cleanBook } = book;
+      return cleanBook;
+    });
+  };
+
+  const currentWeek = getWeeklySeed();
+  const bestSellers = useMemo(() => {
+    return getSeededSelection(books, limit, currentWeek);
+  }, [books, limit, currentWeek]);
 
   return (
     <section className="container mt-4">
-      {loading && bestSellers.length === 0 && <LoadingAnimation />}
+      {loading && <LoadingAnimation />}
       {error && !loading && <p>{error}</p>}
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         {bestSellers.map((book) => (

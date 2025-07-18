@@ -1,7 +1,10 @@
 import RenderCard from "../components/RenderCard";
 import LoadingAnimation from "../components/LoadingAnimation";
+import { useContext } from "react";
+import { BookContext } from "../context/BookContext";
 
-function Home({ books, loading, error }) {
+function Home() {
+  const { books, loading, error } = useContext(BookContext);
   return (
     <section className="container mt-4">
       {loading && <LoadingAnimation />}

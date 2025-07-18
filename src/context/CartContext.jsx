@@ -40,6 +40,22 @@ export function CartProvider({ children }) {
     }
   };
 
+  const updateBookInCart = (updatedBook) => {
+    if (cart.some((item) => item.id === updatedBook.id)) {
+      setCart(
+        cart.map((item) =>
+          item.id === updatedBook.id
+            ? { ...updatedBook, quantity: item.quantity }
+            : item
+        )
+      );
+    }
+  };
+
+  const removeBookFromCartById = (bookId) => {
+    setCart(cart.filter((item) => item.id !== bookId));
+  };
+
   const cleanCart = () => {
     setCart([]);
   };
@@ -59,8 +75,11 @@ export function CartProvider({ children }) {
     <CartContext.Provider
       value={{
         cart,
+        setCart,
         addToCart,
         removeFromCart,
+        updateBookInCart,
+        removeBookFromCartById,
         cleanCart,
         getCartTotal,
         totalItems: getCartTotal(),
