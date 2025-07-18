@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import RenderCard from "../components/RenderCard";
 import LoadingAnimation from "../components/LoadingAnimation";
+import { useContext } from "react";
+import { BookContext } from "../context/BookContext";
 
 /*  Simulo al azar los libros más vendidos y 
     los guardo en el localStorage para que no cambien con tanta frecuencia */
-function Bestsellers({ books, loading, error, limit }) {
+function Bestsellers({ limit }) {
+  const { books, loading, error } = useContext(BookContext);
+
   const [bestSellers, setBestSellers] = useState(() => {
     const savedBestSellers = localStorage.getItem("bestSellers");
     return savedBestSellers ? JSON.parse(savedBestSellers) : [];
