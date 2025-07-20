@@ -10,16 +10,21 @@ function Details() {
   const [bookDetails, setBookDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { getBook } = useContext(BookContext);
+  const { getBook, books, loading: booksLoading } = useContext(BookContext);
 
   useEffect(() => {
+    if (booksLoading) {
+      return;
+    }
     const fetchBookDetails = async () => {
       try {
         const localBook = getBook(id);
         if (!localBook) {
           setError("El libro no existe en la colección local");
+          setLoading(false);
           return;
         }
+
         try {
           const response = await fetch(
             `https://www.googleapis.com/books/v1/volumes/${id}`
@@ -63,12 +68,14 @@ function Details() {
         setLoading(false);
       }
     };
+
     if (id) {
       fetchBookDetails();
     }
-  }, [id, getBook]);
+  }, [id, getBook, books, booksLoading]);
 
-  if (loading) return <LoadingAnimation />;
+  if (booksLoading || loading) return <LoadingAnimation />;
+
   if (error)
     return (
       <div className="container mt-4 text-center">
