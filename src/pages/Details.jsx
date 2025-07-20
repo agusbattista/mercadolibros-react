@@ -1,7 +1,8 @@
 import RenderDetails from "../components/RenderDetails";
 import LoadingAnimation from "../components/LoadingAnimation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { BookContext } from "../context/BookContext";
 
 function Details() {
   const { id } = useParams();
@@ -9,18 +10,52 @@ function Details() {
   const [bookDetails, setBookDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { getBook } = useContext(BookContext);
 
   useEffect(() => {
     const fetchBookDetails = async () => {
       try {
-        const response = await fetch(
-          `https://www.googleapis.com/books/v1/volumes/${id}`
-        );
-        if (!response.ok) {
-          throw new Error("No se pudo encontrar el libro");
+        const localBook = getBook(id);
+        if (!localBook) {
+          setError("El libro no existe en la colección local");
+          return;
         }
-        const data = await response.json();
-        setBookDetails(data);
+        try {
+          const response = await fetch(
+            `https://www.googleapis.com/books/v1/volumes/${id}`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            const combinedBook = {
+              ...data,
+              volumeInfo: {
+                ...data.volumeInfo,
+                ...localBook.volumeInfo,
+                imageLinks: {
+                  ...data.volumeInfo?.imageLinks,
+                  ...localBook.volumeInfo?.imageLinks,
+                },
+              },
+              saleInfo: {
+                ...data.saleInfo,
+                ...localBook.saleInfo,
+                listPrice: {
+                  ...data.saleInfo?.listPrice,
+                  ...localBook.saleInfo?.listPrice,
+                },
+              },
+            };
+            setBookDetails(combinedBook);
+          } else {
+            console.log(
+              "No se pudo obtener información adicional de la API, usando solo datos locales."
+            );
+            setBookDetails(localBook);
+          }
+        } catch (apiError) {
+          console.error("Error al obtener detalles adicionales:", apiError);
+          setBookDetails(localBook);
+        }
       } catch (error) {
         console.error("Error al cargar el libro:", error);
         setError("Error al cargar los detalles del libro");
@@ -31,7 +66,7 @@ function Details() {
     if (id) {
       fetchBookDetails();
     }
-  }, [id]);
+  }, [id, getBook]);
 
   if (loading) return <LoadingAnimation />;
   if (error)
