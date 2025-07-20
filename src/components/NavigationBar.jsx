@@ -42,9 +42,9 @@ function NavigationBar() {
             <Nav.Link as={Link} to="/ofertas">
               Ofertas
             </Nav.Link>
-            <Nav.Link as={Link} to="/contacto">
+            {/*<Nav.Link as={Link} to="/contacto">
               Contacto
-            </Nav.Link>
+            </Nav.Link>*/}
             <Nav.Link as={Link} to="/administracion">
               Administración
             </Nav.Link>

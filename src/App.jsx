@@ -3,7 +3,9 @@ import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Home from "./pages/Home";
-import Contact from "./pages/Contact";
+{
+  /* import Contact from "./pages/Contact"; */
+}
 import Bestsellers from "./pages/Bestsellers";
 import Offers from "./pages/Offers";
 import Cart from "./pages/Cart";
@@ -25,7 +27,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/detalles/:id" element={<Details />}></Route>
-            <Route path="/contacto" element={<Contact />} />
+            {/*<Route path="/contacto" element={<Contact />} /> */}
             <Route
               path="/masvendidos"
               element={<Bestsellers limit={bestSellersLimit} />}
